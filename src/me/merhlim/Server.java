@@ -1,5 +1,6 @@
 package me.merhlim;
 
+import javax.swing.text.html.HTML;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,13 +22,7 @@ public class Server extends Thread {
 
     public void run(){
         try {
-            this.queue.put("Sconn");
-            sleep(100);
-            if(this.queue.take().equals("Cconn")){
-                System.out.println("Ser Blocking Queue Connection Established");
 
-            }
-            System.out.println(this.queue);
             try {
                 this.server = new ServerSocket(this.port);
             } catch (IOException e) {
@@ -36,9 +31,10 @@ public class Server extends Thread {
                 System.exit(0);
             }
             int connectionsMade = 0;
-            while (this.clients.size() <= 3) {
+            while (connectionsMade <= 3) {
                 try {
                     Socket tmpClient = this.server.accept();
+                    System.out.println("Connection from: "+ tmpClient.getInetAddress());
                     PrintWriter out = new PrintWriter(tmpClient.getOutputStream(),true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(tmpClient.getInputStream()));
                     ArrayList client = new ArrayList();
